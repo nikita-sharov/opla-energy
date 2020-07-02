@@ -1,0 +1,62 @@
+﻿<div class="box border rounded-lg shadow-sm p-2 bg-white">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" href="#">Directional Surveys</a>
+        </li>
+    </ul>
+
+    <table class="table table-borderless table-striped">
+        <thead class="text-secondary">
+            <tr>
+                <th><small>Station, #</small></th>
+                <th><small>MD, m</small></th>
+                <th><small>Inc, deg</small></th>
+                <th><small>Azm, deg</small></th>
+                <th><small>TVD</small></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="align-middle">0</td>
+                <td><i class="fas fa-times-circle fa-lg text-danger"></i></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>5.8</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td><i class="fas fa-times-circle fa-lg text-danger"></i></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>584</td>
+                <td>1</td>
+                <td>42.6</td>
+                <td>0</td>
+                <td><i class="fas fa-times-circle fa-lg text-danger"></i></td>
+            </tr>
+            @for (int i = 4; i < 17; i++)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>584</td>
+                    <td>1</td>
+                    <td>42.6</td>
+                    <td>0</td>
+                    <td><i class="fas fa-times-circle fa-lg text-danger"></i></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-between">
+        <button class="btn btn-primary flex-grow-1 shadow-sm">Add</button>
+        <button class="btn btn-danger flex-grow-1 mx-2 shadow-sm">Delete Last</button>
+        <button class="btn btn-warning flex-grow-1 shadow-sm font-weight-bold">Confirm</button>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+﻿@page "/multiple-streams-with-tooltips"
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Multiple Streams with Tooltips</title>
+    <link href="~/css/_charts.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="row">
+        <div class="column time"></div>
+        <div class="column flow"></div>
+        <div class="column pressure"></div>
+        <div class="column mw"></div>
+        <div class="column chokes"></div>
+    </div>
+    <script src="~/lib/moment/moment.js"></script>
+    <script src="~/lib/d3/dist/d3.js"></script>
+    <script src="~/js/_data.js"></script>
+    <script src="~/js/_time-axis.js"></script>
+    <script src="~/js/_chart.js"></script>
+    <script src="~/js/_tooltip.js"></script>
+    <script src="~/js/_multiple-streams.js"></script>
+</body>
+</html>

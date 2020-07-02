@@ -1,0 +1,41 @@
+﻿@page "/flex"
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Flex</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 16px);
+        }
+
+        #legend {
+            background-color: red;
+            /*min-height: 100px;*/
+            height: 100px;
+        }
+
+        #line-charts {
+            background-color: green;
+            min-height: 100px;
+            flex: 1 1 100%;
+        }
+
+        #bar-charts {
+            background-color: blue;
+            /*min-height: 100px;*/
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row" id="legend"></div>
+        <div class="row" id="line-charts"></div>
+        <div class="row" id="bar-charts"></div>
+    </div>
+</body>
+</html>

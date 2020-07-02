@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>MPD Smart V.1.0</title>
+    <link href="~/favicon.ico" rel="icon" asp-append-version="true">
+    @*<environment include="Development">*@
+    <link href="~/css/_base.css" rel="stylesheet" />
+    <link href="~/css/_line-charts.css" rel="stylesheet" />
+    @*</environment>
+        <environment exclude="Development">
+            <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+        </environment>*@
+
+    @if (ViewBag.Mode == ControlScreenMode.Historical)
+    {
+        <style>
+            /*#timestamps > svg > g > g > g:nth-child(2) > text {
+                opacity: 0;
+            }
+
+            #timestamps > svg > g > g > g:nth-child(31) > text {
+                opacity: 0;
+            }*/
+        </style>
+    }
+</head>
+<body>
+    <header>
+        <partial name="_Navbar" />
+    </header>
+    <div class="container">
+        <partial name="_Sidebar" />
+        <main>
+            @RenderBody()
+        </main>
+        <aside>
+            <partial name="_Indicators" />
+        </aside>
+    </div>
+    <script src="~/lib/d3/dist/d3.min.js"></script>
+    <script src="~/lib/moment/moment.min.js"></script>
+    @*<environment include="Development">*@    
+    <script src="~/js/_data.js"></script>
+    <script src="~/js/_time-axis.js"></script>
+    <script src="~/js/_chart.js"></script>
+    <script src="~/js/_tooltip.js"></script>
+    <script src="~/js/_bar-charts.js"></script>
+
+    @if (ViewBag.Mode == ControlScreenMode.Streaming)
+    {
+        <script src="~/js/_line-charts-streaming.js"></script>
+    }
+    else
+    {
+        <script src="~/js/_line-charts-historical.js"></script>
+    }
+    @*</environment>
+        <environment exclude="Development">
+            <script src="~/js/site.js" asp-append-version="true"></script>
+        </environment>*@
+</body>
+</html>

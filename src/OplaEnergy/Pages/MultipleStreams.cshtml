@@ -1,0 +1,300 @@
+﻿@page "/multiple-streams"
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Multiple Streams</title>
+    <style>
+        .row {
+            display: flex;
+            height: calc(100vh - 18px);
+        }
+
+        .column {
+            flex-grow: 1;
+            flex-basis: 50%;
+            min-width: 0;
+        }
+
+        .line {
+            fill: none;
+            stroke-width: 2px;
+        }
+
+        .tick line {
+            stroke: rgba(0, 0, 0, 0.2);
+        }
+
+        .border {
+            fill: none;
+            stroke: black;
+        }
+
+        .series .flow-in {
+            stroke: #a3c15d;
+        }
+
+        .series .flow-out {
+            stroke: #da9e46;
+        }
+
+        .series .spp {
+            stroke: #4a7595;
+        }
+
+        .series .bhp {
+            stroke: #7a0c15;
+        }
+
+        .series .sbp {
+            stroke: #402353;
+        }
+
+        .series .mw-in {
+            stroke: #a5c05f;
+        }
+
+        .series .mw-out {
+            stroke: #da9e46;
+        }
+
+        .series .choke-a-current {
+            stroke: #0e4e8b;
+        }
+
+        .series .choke-a-set {
+            stroke: #1bb7a2;
+            stroke-dasharray: 6 4;
+        }
+
+        .series .choke-b-current {
+            stroke: #a54ab3;
+        }
+
+        .series .choke-b-set {
+            stroke: #d487cd;
+            stroke-dasharray: 6 4;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="column flow"></div>
+        <div class="column pressure"></div>
+        <div class="column mw"></div>
+        <div class="column chokes"></div>
+    </div>    
+    <script src="~/lib/moment/moment.js"></script>
+    <script src="~/lib/d3/dist/d3.js"></script>
+    <script>
+        function getData(length, random) {
+            const data = [];
+
+            const start = moment()
+                .milliseconds(0)
+                .subtract(length, "seconds");
+
+            for (let seconds = 0; seconds < length; seconds++) {
+                const timestamp = moment(start)
+                    .add(seconds, "seconds")
+                    .toDate();
+
+                const point = getPoint(timestamp, random)
+                data.push(point);
+            }
+
+            return data;
+        }
+
+        function getPoint(timestamp, random) {
+            return {
+                timestamp,
+                flow: {
+                    in: random(),
+                    out: random()
+                },
+                pressure: {
+                    spp: random(),
+                    bhp: random(),
+                    sbp: random(),
+                },
+                mw: {
+                    in: random(),
+                    out: random()
+                },
+                chokes: {
+                    a: {
+                        current: random(),
+                        set: random()
+                    },
+                    b: {
+                        current: random(),
+                        set: random()
+                    }
+                }
+            }
+        }
+
+        var n = 34;
+        var durationInMilliseconds = 1000;
+        var random = d3.randomNormal(0.5, 0.1);
+        var data = getData(n, random);
+
+        let rowHeight = d3.select(".row").node().clientHeight;
+
+        let yScale = d3.scaleTime()
+            .domain([data[2].timestamp, data[data.length - 3].timestamp])
+            .range([0, rowHeight]);
+
+        function lineChart(containerSelector) {
+            const container = d3.select(containerSelector);
+            const containerWidth = container.node().clientWidth;
+            const containerHeight = container.node().clientHeight;
+
+            const svg = container.append("svg")
+                .attr("width", containerWidth)
+                .attr("height", containerHeight);
+
+            var margin = { top: 40, right: 20, bottom: 40, left: 40 };
+            var width = containerWidth - margin.left - margin.right;
+            var height = containerHeight - margin.top - margin.bottom;
+
+            var g = svg.append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            const defs = g.append("defs");
+
+            defs.append("clipPath")
+                .attr("id", "clip")
+                .append("rect")
+                .attr("width", width)
+                .attr("height", height);
+
+            defs.append("clipPath")
+                .attr("id", "axis-clip")
+                .append("rect")
+                .attr("width", containerWidth)
+                .attr("height", height)
+                .attr("transform", "translate(" + -margin.left + ")");
+
+            g.append("path")
+                .attr("class", "border")
+                .attr("d", `M0.5,0.5H${width + 0.5}V${height + 0.5}H0.5V0.5`);
+
+            let xScale = d3.scaleLinear()
+                .domain([0, 1])
+                .range([0, width]);
+
+            let xAxis = d3.axisBottom(xScale)
+                .tickSizeInner(-height)
+                .tickSizeOuter(0)
+                .tickFormat("");
+
+            let xAxisDraw = g.append("g")
+                .attr("class", "axis axis--xScale")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+            let yAxis = d3.axisLeft(yScale)
+                .ticks(n - 1)
+                .tickSizeInner(-width)
+                .tickSizeOuter(0);
+
+            let yAxisDraw = g.append("g")
+                .attr("class", "axis axis--yScale")
+                .attr("clip-path", "url(#axis-clip)")
+                .call(yAxis);
+
+            g = g.append("g")
+                .attr("clip-path", "url(#clip)");
+
+            g = g.append("g")
+                .attr("class", "series");
+
+            let lines = [];
+
+            function tick() {
+                g.interrupt();
+                g.attr("transform", null)
+
+                // Redraw the lines.
+                for (line of lines) {
+                    line.selection.attr("d", line.generator);
+                }
+
+                g.transition()
+                    .duration(durationInMilliseconds)
+                    .ease(d3.easeLinear)
+                    .attr("transform", "translate(0," + yScale(data[2].timestamp) + ")");
+
+                // slide the yScale-axis to the top
+                yAxisDraw.transition()
+                    .duration(durationInMilliseconds)
+                    .ease(d3.easeLinear)
+                    .call(yAxis.scale(yScale));
+            }
+
+            tick.addLine = function (getValue, className) {
+                let generator = d3.line()
+                    .x(d => xScale(getValue(d)))
+                    .y(d => yScale(d.timestamp));
+
+                let selection = g.append("path")
+                    .datum(data)
+                    .attr("class", "line " + className)
+                    .attr("d", generator);
+
+                lines.push({ generator, selection });
+                return tick;
+            }
+
+            return tick;
+        }
+
+        let updateFlow = lineChart(".flow")
+            .addLine(d => d.flow.in, "flow-in")
+            .addLine(d => d.flow.out, "flow-out");
+
+        let updatePressure = lineChart(".pressure")
+            .addLine(d => d.pressure.spp, "spp")
+            .addLine(d => d.pressure.bhp, "bhp")
+            .addLine(d => d.pressure.sbp, "sbp");
+
+        let updateMw = lineChart(".mw")
+            .addLine(d => d.mw.in, "mw-in")
+            .addLine(d => d.mw.out, "mw-out");
+
+        let updateChokes = lineChart(".chokes")
+            .addLine(d => d.chokes.a.current, "choke-a-current")
+            .addLine(d => d.chokes.a.set, "choke-a-set")
+            .addLine(d => d.chokes.b.current, "choke-b-current")
+            .addLine(d => d.chokes.b.set, "choke-b-set");
+
+        (function update() {            
+
+            // update the domain
+            yScale.domain([data[3].timestamp, data[data.length - 2].timestamp]);
+
+            const now = moment(data[data.length - 1].timestamp)
+                .add(1, "seconds")
+                .toDate();
+
+            const point = getPoint(now, random);
+
+            // Push the new data point onto the back.
+            data.push(point);
+
+            updateFlow();
+            updatePressure();
+            updateMw();
+            updateChokes();
+
+            // Pop the old data point off the front.
+            data.shift();
+
+            setTimeout(update, durationInMilliseconds);
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Well Data</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <style>
+        header {
+            /*position: sticky;*/
+            height: 4rem;
+        }
+
+        #logo {
+            height: 28px;
+        }
+
+        .icon {
+            height: 1.5rem;
+        }
+
+        .cancel-icon {
+            height: 1rem;
+        }
+
+        .alarm-icon {
+            height: 1.5rem;
+        }
+
+        .alarm-icon {
+            /*font-family: Arial, sans-serif;
+            white-space: nowrap;
+            color: #495057;
+            font-size: 26px;
+            box-sizing: border-box;
+            height: 32px;*/
+            width: auto;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 8px;
+        }
+
+        /*aside {
+            width: 4rem;
+            position: fixed;
+            top: 4rem;
+            left: 0;
+            height: calc(100vh - 4rem);
+        }*/
+
+        /*.fixed-left {
+            position: fixed;
+            top: 4rem;
+            left: 0;
+            bottom: 0;
+        }*/
+
+        .container-custom {
+            margin-top: calc(4rem + 10px);
+            margin-left: 4rem;
+        }
+
+        .sidebar {
+            width: 4rem;
+            position: fixed;
+            top: 4rem;
+            left: 0;
+            height: calc(100vh - 4rem);
+        }
+
+            .sidebar div {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                line-height: 1.25em;
+                margin-top: 8px;
+                margin-bottom: 8px;
+            }
+
+        main {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        aside {
+            margin-right: 10px;
+        }
+
+            aside div {
+                margin-bottom: 10px;
+            }
+
+        .box {
+            margin-bottom: 10px;
+        }
+
+        nav small {
+            line-height: 1rem;
+        }
+
+        .table thead tr th {
+            line-height: 1rem;
+        }
+    </style>
+</head>
+<body class="text-secondary bg-light">
+    <header class="navbar navbar-dark bg-primary fixed-top shadow-sm">
+        <img id="logo" src="~/img/logo.png" />
+        <span class="text-light">Operation Mode: Drilling</span>
+        <div class="d-inline-block">
+            <img class="icon m-2" src="~/img/Model_passed_icon.png" />
+            <img class="icon m-2" src="~/img/manifoldOff_icon.png" />
+            <img class="icon m-2" src="~/img/ECU_Icon_gray.png" />
+            <img class="icon m-2" src="~/img/WITS_Status_icon_green.png" />
+        </div>
+    </header>
+    <nav class="sidebar fixed-left d-flex flex-column align-items-center border-right shadow-sm bg-white">
+        <div class="mt-4">
+            <img class="icon m-1" src="~/img/wits_icon_disabled.png" />
+            <small style="color: #bdbdbd">Well<br />List</small>
+        </div>
+        <div>
+            @*<img src="~/img/well_info_icon_enabled.png" />
+                <span style="color: #1474b0">Well<br />Info</span>*@
+            <img class="icon m-1" src="~/img/well_info_icon_disabled.png" />
+            <small style="color: #bdbdbd">Well<br />Info</small>
+        </div>
+        <div>
+            <img class="icon m-1" src="~/img/well_data_icon_disabled.png" />
+            <small style="color: #bdbdbd">Well<br />Data</small>
+        </div>
+        <div>
+            <img class="icon m-1" src="~/img/control_screen_icon_enabled.png" />
+            <small class="text-body">Control<br />Screen</small>
+            @*<img src="~/img/control_screen_icon_disabled.png" />
+                <span style="color: #bdbdbd">Control<br />Screen</span>*@
+        </div>
+    </nav>
+    <div class="container-custom d-flex">
+        <main class="flex-grow-1">
+            @RenderBody()
+        </main>
+        <aside>
+            <div class="d-flex flex-column align-items-center border border-primary rounded-lg shadow-sm px-4 py-2 position-relative bg-white text-nowrap">
+                <span>Well Depth</span>
+                <span class="font-weight-bold text-body">1.57</span>
+                <span>m</span>
+                <img class="alarm-icon" src="~/img/alaram_icon_disabled.png" />
+            </div>
+            <div class="d-flex flex-column align-items-center border border-secondary rounded-lg shadow-sm px-4 py-2 position-relative bg-white">
+                <span class="text-nowrap">Bit Depth</span>
+                <span class="font-weight-bold text-body">1.57</span>
+                <span>m</span>
+                <img class="alarm-icon" src="~/img/alaram_icon_disabled.png" />
+            </div>
+            <div class="d-flex flex-column align-items-center border border-success rounded-lg shadow-sm px-4 py-2 position-relative bg-white">
+                <span class="text-nowrap">Pump Rate</span>
+                <span class="font-weight-bold text-body">1.821</span>
+                <span>m³/min</span>
+                <img class="alarm-icon" src="~/img/alaram_icon_disabled.png" />
+            </div>
+            <div class="d-flex flex-column align-items-center border border-danger rounded-lg shadow-sm px-4 py-2 position-relative bg-white">
+                <span class="text-nowrap">SBP</span>
+                <span class="font-weight-bold text-body">101.3</span>
+                <span>kPa</span>
+                <img class="alarm-icon" src="~/img/alaram_icon_disabled.png" />
+            </div>
+            <div class="d-flex flex-column align-items-center border border-warning rounded-lg shadow-sm px-4 py-2 position-relative bg-white">
+                <span class="text-nowrap">BHP</span>
+                <span class="font-weight-bold text-body">121.2</span>
+                <span>kPa</span>
+                <img class="alarm-icon" src="~/img/alaram_icon_disabled.png" />
+            </div>
+            <div class="d-flex flex-column align-items-center border border-info rounded-lg shadow-sm px-4 py-2 position-relative bg-white">
+                <span class="text-nowrap">Target SBP</span>
+                <span class="font-weight-bold text-body">1000.0</span>
+                <span>kPa</span>
+                <img class="alarm-icon" src="~/img/alaram_icon_disabled.png" />
+            </div>
+            <div class="d-flex flex-column align-items-center border border-dark rounded-lg shadow-sm px-4 py-2 position-relative bg-white text-nowrap">
+                <span>Date</span>
+                <span class="font-weight-bold text-body">2020-02-07</span>
+                <span>YYYY-MM-DD</span>
+            </div>
+        </aside>
+    </div>
+    <script src="~/lib/jquery-slim/dist/jquery.slim.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+</body>
+</html>

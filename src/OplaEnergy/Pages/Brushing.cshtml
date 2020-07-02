@@ -1,0 +1,184 @@
+﻿@page "/brushing"
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Brushing</title>
+    <style>
+        .handle {
+            fill: black;
+        }
+
+        .series {
+            fill: none;
+            stroke: black;
+            stroke-width: 1px;
+        }
+
+        .zoom {
+            cursor: move;
+            fill: none;
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body>
+    <svg width="480" height="640"></svg>
+    <script src="~/lib/d3/dist/d3.min.js"></script>
+    <script src="~/lib/moment/moment.min.js"></script>
+    <script>
+        const svg = d3.select("svg");
+
+        let context = {
+            margin: {
+                top: 20,
+                right: 20,
+                bottom: 20,
+                left: 40
+            },
+            width: 40
+        };
+
+        const height = +svg.attr("height") - context.margin.top - context.margin.bottom;
+
+        const periodInSeconds = 3200;
+        const end = moment().milliseconds(0).toDate();
+        const start = moment(end).subtract(periodInSeconds, "seconds").toDate();
+
+        context.group = svg.append("g")
+            .attr("class", "context")
+            .attr("transform", `translate(${context.margin.left},${context.margin.top})`);
+
+        context.yScale = d3.scaleTime()
+            .domain([start, end])
+            .range([0, height]);
+
+        context.yAxis = d3.axisLeft(context.yScale);
+
+        context.group.append("g")
+            .attr("class", "axis--y")
+            .call(context.yAxis);
+
+        let focus = {
+            margin: {
+                top: 20,
+                right: 20,
+                bottom: 20,
+                left: context.margin.left + context.width + context.margin.right + 40
+            }
+        };
+
+        focus.width = +svg.attr("width") - focus.margin.left - focus.margin.right;
+
+        focus.group = svg.append("g")
+            .attr("class", "focus")
+            .attr("transform", `translate(${focus.margin.left},${focus.margin.top})`);
+
+        focus.yScale = d3.scaleTime()
+            .domain([start, end])
+            .range([0, height]);
+
+        focus.yAxis = d3.axisLeft(focus.yScale);
+
+        focus.group.append("g")
+            .attr("class", "axis--y")
+            .call(focus.yAxis);
+
+        focus.xScale = d3.scaleLinear()
+            .domain([0, 1])
+            .range([0, focus.width])
+
+        focus.xAxis = d3.axisBottom(focus.xScale);
+
+        focus.group.append("g")
+            .attr("class", "axis--x")
+            .attr("transform", `translate(0,${height})`)
+            .call(focus.xAxis);
+
+        let series = [];
+        for (let seconds = 0; seconds < periodInSeconds; seconds++) {
+            let point = {
+                timestamp: moment(start).add(seconds, "seconds").toDate(),
+                value: Math.random()
+            }
+
+            series.push(point);
+        }
+
+        const line = d3.line()
+            .x(point => focus.xScale(point.value))
+            .y(point => focus.yScale(point.timestamp));
+
+        focus.group.append("path")
+            .datum(series)
+            .attr("class", "series")
+            .attr("d", line);
+
+        let brush = d3.brushY()
+            .extent([[0, 0], [context.width, height]])
+            ////.on("brush end", brushed);
+            .on("brush", brushed);
+
+        let zoom = d3.zoom()
+            .scaleExtent([1, Infinity])
+            .translateExtent([[0, 0], [focus.width, height]])
+            .extent([[0, 0], [focus.width, height]])
+            .on("zoom", zoomed);
+
+        context.group.append("g")
+            .attr("class", "brush")
+            .call(brush)
+            ////.call(brush.move, focus.yScale.range());
+            .call(brush.move, [500, 600]);
+
+        //focus.group.append("rect")
+        //    .attr("class", "zoom")
+        //    .attr("width", focus.width)
+        //    .attr("height", height)
+        //    .call(zoom);
+
+        function brushed() {
+            if (d3.event.sourceEvent && (d3.event.sourceEvent.type === "zoom")) {
+                // ignore brush-by-zoom
+                return;
+            }
+
+            let s = d3.event.selection || context.yScale.range();
+            let domain = s.map(context.yScale.invert, context.yScale);            
+
+            focus.yScale.domain(domain);
+
+            focus.group.select(".series")
+                .attr("d", line);
+
+            focus.group.select(".axis--y")
+                .call(focus.yAxis);
+
+            //focus.group.select(".zoom")
+            //    .call(zoom.transform, d3.zoomIdentity
+            //        .scale(height / (s[1] - s[0]))
+            //        .translate(-s[0], 0));
+        }
+
+        function zoomed() {
+            ////if (d3.event.sourceEvent && (d3.event.sourceEvent.type === "brush" || d3.event.sourceEvent.type === "end")) {
+            if (d3.event.sourceEvent && (d3.event.sourceEvent.type === "brush")) {
+                // ignore zoom-by-brush                
+                return;
+            }
+
+            debugger;
+            return;
+
+            let t = d3.event.transform;
+            let domain = t.rescaleY(context.yScale).domain();
+
+            focus.yScale.domain(domain);
+            focus.group.select(".series").attr("d", line);
+            focus.group.select(".axis--y").call(focus.yAxis);
+            context.group.select(".brush").call(brush.move, focus.yScale.range().map(t.invertY, t));
+        }
+    </script>
+</body>
+</html>

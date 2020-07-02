@@ -1,0 +1,224 @@
+﻿<div class="row">
+    <div class="col">
+        <div class="heading">
+            <div class="helper">
+                <span style="color: #fff">Operation Charts</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="operation-charts-row">
+    <div class="col" id="operation-charts-col">
+        <div class="row">
+            <div class="col narrow date" id="legend-col-date">
+                <img class="calendar-icon" src="~/img/calendar-256.png" />
+                <span class="date date-value">2019-12-23</span>
+            </div>
+            <div class="col narrow flow">
+                <div class="legend">
+                    <div class="dataset">
+                        <div class="extent" style="border-color: #a3c15d">
+                            <span>0</span>
+                            <div>
+                                <span>Flow In: </span>
+                                <span class="flow-in-value">1.821</span>
+                            </div>
+                            <span>3.6</span>
+                        </div>
+                    </div>
+                    <div class="dataset">
+                        <div class="extent" style="border-color: #da9e46">
+                            <span>0</span>
+                            <div>
+                                <span>Flow Out: </span>
+                                <span class="flow-out-value">0</span>
+                            </div>
+                            <span>3.6</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col narrow pressure">
+                <div class="legend">
+                    <div class="dataset">
+                        <div class="extent" style="border-color: #4a7595">
+                            <span>0</span>
+                            <div>
+                                <span>SPP: </span>
+                                <span class="pressure-spp-value">8000</span>
+                            </div>
+                            <span>10000</span>
+                        </div>
+                    </div>
+                    <div class="dataset">
+                        <div class="extent" style="border-color: #7a0c15">
+                            <span>0</span>
+                            <div>
+                                <span>BHP: </span>
+                                <span class="pressure-bhp-value">107.6</span>
+                            </div>
+                            <span>30000</span>
+                        </div>
+                    </div>
+                    <div class="dataset">
+                        <div class="extent" style="border-color: #402353">
+                            <span>0</span>
+                            <div>
+                                <span>SBP: </span>
+                                <span class="pressure-sbp-value">SBP: 101.3</span>
+                            </div>
+                            <span>5000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col narrow density">
+                <div class="legend">
+                    <div class="dataset">
+                        <div class="extent" style="border-color: #a3c15d">
+                            <span>750</span>
+                            <div>
+                                <span>MW In: </span>
+                                <span class="mw-in-value">1100</span>
+                            </div>
+                            <span>1500</span>
+                        </div>
+                    </div>
+                    <div class="dataset">
+                        <div class="extent" style="border-color: #da9e46">
+                            <span>750</span>
+                            <div class="">
+                                <span>MW Out: </span>
+                                <span class="mw-out-value">1000</span>
+                            </div>
+                            <span>1500</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col narrow chokes">
+                <div class="legend">
+                    <div class="dataset">
+                        <div class="extent" style="border-color: #0e4e8b">
+                            <span>0</span>
+                            <div>
+                                <span>Choke A Current: </span>
+                                <span class="chokes-a-current-value">23</span>
+                            </div>
+                            <span>100</span>
+                        </div>
+                    </div>
+                    <div class="dataset">
+                        <div class="extent" style="border-color: #1bb7a2; border-bottom-style: dashed">
+                            <span>0</span>
+                            <div>
+                                <span>Choke A Set: </span>
+                                <span class="chokes-a-set-value">25</span>
+                            </div>
+                            <span>100</span>
+                        </div>
+                    </div>
+                    <div class="dataset">
+                        <div class="extent" style="border-color: #a54ab3">
+                            <span>0</span>
+                            <div>
+                                <span>Choke B Current: </span>
+                                <span class="chokes-b-current-value">78</span>
+                            </div>
+                            <span>100</span>
+                        </div>
+                    </div>
+                    <div class="dataset">
+                        <div class="extent" style="border-color: #d487cd; border-bottom-style: dashed">
+                            <span>0</span>
+                            <div>
+                                <span>Choke B Set: </span>
+                                <span class="chokes-b-set-value">75</span>
+                            </div>
+                            <span>100</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="line-charts">
+            <div class="col narrow date" id="timestamps"></div>
+            <div class="col narrow flow" id="flow-chart"></div>
+            <div class="col narrow pressure" id="pressure-chart"></div>
+            <div class="col narrow density" id="density-chart"></div>
+            <div class="col narrow chokes" id="chokes-chart"></div>
+        </div>
+        <div class="row">
+            <div class="col narrow date"></div>
+            <div class="col narrow flow">
+                <div class="gradient"></div>
+                <div class="bar-chart-indicator">
+                    <div class="bar-chart-indicator-row header">
+                        <div class="bar-chart-indicator-col negative-value">Losses</div>
+                        <div class="bar-chart-indicator-col neutral">Fluid</div>
+                        <div class="bar-chart-indicator-col positive-value">Gains</div>
+                    </div>
+                    <div class="bar-chart" id="fluid-bar-chart">
+                        <div class="bar-chart-indicator-row values">
+                            <div class="bar-chart-indicator-col negative-value">-1821</div>
+                            <div class="bar-chart-indicator-col positive-value"></div>
+                            <img class="indicator-icon" src="~/img/alaram_icon_disabled.png" />
+                        </div>
+                        <div class="bar-chart-indicator-row unit">
+                            <div class="bar-chart-indicator-col negative-value">lit</div>
+                            <div class="bar-chart-indicator-col positive-value"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col narrow pressure">
+                <div class="gradient"></div>
+                <div class="bar-chart-indicator">
+                    <div class="bar-chart-indicator-row header">
+                        <div class="bar-chart-indicator-col negative-value">Below</div>
+                        <div class="bar-chart-indicator-col neutral">SBP</div>
+                        <div class="bar-chart-indicator-col positive-value">Above</div>
+                    </div>
+                    <div class="bar-chart" id="sbp-bar-chart">
+                        <div class="bar-chart-indicator-row values">
+                            <div class="bar-chart-indicator-col negative-value">-898.7</div>
+                            <div class="bar-chart-indicator-col positive-value"></div>
+                            <img class="indicator-icon" src="~/img/alarm_icon_enabled.png" />
+                        </div>
+                        <div class="bar-chart-indicator-row unit">
+                            <div class="bar-chart-indicator-col negative-value">kPa</div>
+                            <div class="bar-chart-indicator-col positive-value"></div>
+                            <div class="alarm">
+                                <span>-1000</span>
+                                <span class="target-value">Target: 1000.0 kPa (145.0 psi)</span>
+                                <span>4000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col narrow density">
+                <div class="gradient"></div>
+                <div class="bar-chart-indicator">
+                    <div class="bar-chart-indicator-row header">
+                        <div class="bar-chart-indicator-col negative-value">Drop</div>
+                        <div class="bar-chart-indicator-col neutral">MW</div>
+                        <div class="bar-chart-indicator-col positive-value">Build</div>
+                    </div>
+                    <div class="bar-chart" id="mw-bar-chart">
+                        <div class="bar-chart-indicator-row values">
+                            <div class="bar-chart-indicator-col negative-value">-100</div>
+                            <div class="bar-chart-indicator-col positive-value"></div>
+                            <img class="indicator-icon" src="~/img/alaram_icon_disabled.png" />
+                        </div>
+                        <div class="bar-chart-indicator-row unit">
+                            <div class="bar-chart-indicator-col negative-value">kg/m³</div>
+                            <div class="bar-chart-indicator-col positive-value"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col narrow chokes"></div>
+        </div>
+    </div>
+</div>

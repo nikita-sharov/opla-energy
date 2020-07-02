@@ -1,0 +1,120 @@
+﻿@page "/streaming-time-scale"
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Streaming Time Scale</title>
+    <style>
+        .line {
+            fill: none;
+            stroke: green;
+            stroke-width: 2px;
+        }
+
+        .tick line {
+            stroke: rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <svg width="480" height="640"></svg>
+    <script src="~/lib/d3/dist/d3.min.js"></script>
+    <script>
+        var n = 34,
+            durationInMilliseconds = 1000,
+            now = new Date(Date.now() - durationInMilliseconds),
+            random = d3.randomNormal(0, .2),
+            data = d3.range(n).map(random);
+
+        var svg = d3.select("svg"),
+            margin = { top: 20, right: 20, bottom: 20, left: 40 },
+            width = +svg.attr("width") - margin.left - margin.right,
+            height = +svg.attr("height") - margin.top - margin.bottom,
+            g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        g.append("defs").append("clipPath")
+            .attr("id", "clip")
+            .append("rect")
+            .attr("width", width)
+            .attr("height", height);
+
+        g.append("defs").append("clipPath")
+            .attr("id", "axis-clip")
+            .append("rect")
+            .attr("width", svg.attr("width"))
+            .attr("height", height)
+            .attr("transform", "translate(" + -margin.left + ")");
+
+        let yScale = d3.scaleTime()
+            .domain([now - (n - 2) * durationInMilliseconds, now - durationInMilliseconds])
+            .range([0, height]);
+
+        let xScale = d3.scaleLinear()
+            .domain([-1, 1])
+            .range([width, 0]);
+
+        let line = d3.line()
+            .x(function (d, i) { return xScale(d); })
+            .y(function (d, i) { return yScale(now - (n - 1 - i) * durationInMilliseconds); });
+
+        let xAxis = d3.axisBottom(xScale)
+            .tickSizeInner(-height);
+
+        let xAxisDraw = g.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+
+        let yAxis = d3.axisLeft(yScale)
+            .ticks(n)
+            .tickSizeInner(-width);
+
+        let yAxisDraw = g.append("g")
+            .attr("class", "axis axis--y")
+            //.attr("clip-path", "url(#axis-clip)")
+            .call(yAxis);
+
+        g = g.append("g")
+            .attr("clip-path", "url(#clip)");
+
+        g.append("path")
+            .datum(data)
+            .attr("class", "line")
+            .attr("d", line)
+            .transition()
+            .duration(durationInMilliseconds)
+            .ease(d3.easeLinear)
+            .on("start", tick);
+
+        function tick() {
+            // update the domain
+            now = new Date();
+            yScale.domain([now - (n - 2) * durationInMilliseconds, now - durationInMilliseconds]);
+
+            // Push a new data point onto the back.
+            data.push(random());
+
+            // Redraw the line.
+            d3.select(this)
+                .attr("d", line)
+                .attr("transform", null);
+
+            // slide the yScale-axis to the top
+            yAxisDraw.transition()
+                .duration(durationInMilliseconds)
+                .ease(d3.easeLinear)
+                .call(yAxis.scale(yScale));
+
+            // Slide it to the top.
+            d3.active(this)
+                .attr("transform", "translate(0," + yScale(now - (n - 1) * durationInMilliseconds) + ")")
+                .transition()
+                .on("start", tick);
+
+            // Pop the old data point off the front.
+            data.shift();
+        }
+    </script>
+</body>
+</html>

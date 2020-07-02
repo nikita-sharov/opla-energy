@@ -1,0 +1,19 @@
+[
+  {
+    "outputFileName": "wwwroot/css/site.min.css",
+    "inputFiles": [
+      "wwwroot/css/_base.css",
+      "wwwroot/css/_line-charts.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/site.js",
+    "inputFiles": [
+      "wwwroot/js/_bar-charts.js",
+      "wwwroot/js/_line-charts-streaming.js"
+    ],
+    "minify": {
+      "enabled": false
+    }
+  }
+]

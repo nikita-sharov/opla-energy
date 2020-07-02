@@ -1,0 +1,258 @@
+﻿@page "/tooltips"
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Tooltips</title>
+    <style>
+        svg {
+            font-family: Arial, sans-serif;
+        }
+
+        .series {
+            fill: none;
+            stroke-width: 2px;
+        }
+
+            .series.flow-in {
+                stroke: #a3c15d;
+            }
+
+            .series.flow-out {
+                stroke: #da9e46;
+            }
+
+        .zoom {
+            fill: none;
+            pointer-events: all;
+        }
+
+        .tick line {
+            stroke: rgba(0, 0, 0, 0.2);
+        }
+
+        .tooltip {
+            pointer-events: none;
+        }
+
+            .tooltip .timestamp {
+                dominant-baseline: middle;
+                text-anchor: end;
+            }
+
+            .tooltip .line {
+                stroke: rgba(0, 0, 0, 0.3);
+                stroke-width: 4px;
+            }
+
+
+            .tooltip .background {
+                fill: white;
+            }
+    </style>
+</head>
+<body>
+    <svg width="480" height="640"></svg>
+    <script src="~/lib/d3/dist/d3.min.js"></script>
+    <script>
+        function updateTextBackground(textSelection, backgroundSelection) {
+            const bbox = textSelection.node()
+                .getBBox();
+
+            backgroundSelection.attr("x", bbox.x)
+                .attr("y", bbox.y)
+                .attr("width", bbox.width)
+                .attr("height", bbox.height);
+        }
+
+        const ClassName = {
+            MOUSE_TARGET: "mouse-target",
+            TIP: "tooltip",
+            BACKGROUND: "background",
+            LINE: "line"
+        };
+
+        const MARGIN_BOTTOM = 10;
+
+        class Tooltip {
+            constructor(container, height, colors) {
+                this.height = height;
+
+                //this.mouseTarget = container.append("rect")
+                //    .attr("class", ClassName.MOUSE_TARGET)
+                //    .attr("width", width)
+                //    .attr("height", height)
+                //    .on("mousemove", mousemove)
+                //    .on("mouseleave", mouseleave);
+
+                this.tip = container.append("g")
+                    .attr("class", ClassName.TIP);
+
+                this.timestampBackground = this.tip.append("rect")
+                    .attr("class", ClassName.BACKGROUND);
+
+                this.timestampText = this.tip.append("text")
+                    .text(flowInData.length - 1)
+                    .attr("class", "timestamp")
+                    .attr("x", -8);
+
+                this.valuesBackground = this.tip.append("rect")
+                    .attr("class", ClassName.BACKGROUND);
+
+                this.valuesText = this.tip.append("text")
+                    .attr("class", "values")
+                    .attr("x", 5)
+                    .attr("y", -10);
+
+                this.line = this.tip.append("line")
+                    .attr("class", ClassName.LINE)
+                    .attr("x2", width);
+
+                this.colors = colors;
+            }
+
+            //mousemove() {
+            //    const mouse = d3.mouse(this);
+            //    this.update()
+
+            //}
+
+            //mouseleave() {
+
+            //}
+
+            update(point, mouseY) {
+                this.timestampText.text(point.timestamp);
+                updateTextBackground(this.timestampText, this.timestampBackground);
+
+                this.valuesText.selectAll("tspan")
+                    .data(point.values)
+                    .join(
+                        enter => {
+                            enter.append("tspan")
+                                .attr("fill", (d, i) => this.colors[i])
+                                .attr("dx", 5)
+                                .text(d => d);
+                        },
+                        update => {
+                            update.text(d => d);
+                        }
+                    );
+
+                updateTextBackground(this.valuesText, this.valuesBackground);
+
+                this.tip.attr("transform", `translate(0,${this.translateY(mouseY)})`);
+            }
+
+            translateY(mouseY) {
+                const yMax = this.height - MARGIN_BOTTOM;
+
+                if (mouseY) {
+                    return Math.min(mouseY, yMax);
+                } else {
+                    return yMax;
+                }
+            }
+        }
+
+        var n = 80;
+        var visible = 40;
+        var flowInRandom = d3.randomNormal(0, .2);
+        var flowInData = d3.range(n).map(flowInRandom);
+        var flowOutRandom = d3.randomNormal(0, .3);
+        var flowOutData = d3.range(n).map(flowOutRandom);
+
+        var svg = d3.select("svg"),
+            margin = { top: 20, right: 20, bottom: 20, left: 40 },
+            width = +svg.attr("width") - margin.left - margin.right,
+            height = +svg.attr("height") - margin.top - margin.bottom,
+            g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        var y = d3.scaleLinear()
+            .domain([0, n - 1])
+            .range([-height, height]);
+
+        var x = d3.scaleLinear()
+            .domain([-1, 1])
+            .range([0, width]);
+
+        var line = d3.line()
+            .x(function (d, i) { return x(d); })
+            .y(function (d, i) { return y(i); });
+
+        let xAxis = d3.axisBottom(x)
+            .tickSizeInner(-height);
+
+        let xAxisGroup = g.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", "translate(0," + y(n - 1) + ")")
+            .call(xAxis);
+
+        xAxisGroup.selectAll("text")
+            .attr("dy", 15);
+
+        let yAxis = d3.axisLeft(y)
+            .tickSizeInner(-width);
+
+        let yAxisGroup = g.append("g")
+            .attr("class", "axis axis--y")
+            .call(yAxis);
+
+        yAxisGroup.selectAll("text")
+            .attr("dx", -5);
+
+        let series = g.append("g")
+            .attr("class", "series");
+
+        let flowInPath = series.append("path")
+            .datum(flowInData)
+            .attr("class", "series flow-in")
+            .attr("pointer-events", "none")
+            .attr("d", line);
+
+        let flowOutPath = series.append("path")
+            .datum(flowOutData)
+            .attr("class", "series flow-out")
+            .attr("pointer-events", "none")
+            .attr("d", line);
+
+        g.append("rect")
+            .attr("class", "zoom")
+            .attr("width", width)
+            .attr("height", height)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave);
+
+        function mousemove() {
+            const mouseY = d3.mouse(this)[1];
+
+            let inverted = y.invert(mouseY);
+            let i = Math.round(inverted);
+
+            const point = getPoint(i);
+            tooltip.update(point, mouseY);
+        }
+
+        function mouseleave() {
+            const point = getPoint(flowInData.length - 1);
+            tooltip.update(point);
+        }
+
+        function getPoint(i) {
+            return {
+                timestamp: i,
+                values: [
+                    flowInData[i].toFixed(4),
+                    flowOutData[i].toFixed(4)
+                ]
+            };
+        }
+
+        const colors = ["#a3c15d", "#da9e46"];
+        const tooltip = new Tooltip(g, height, colors);
+
+        mouseleave();
+    </script>
+</body>
+</html>

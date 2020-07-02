@@ -1,0 +1,116 @@
+﻿@page
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Bar Chart</title>
+    <style>
+        .bar-chart-indicator {
+            border: 1px solid black;
+            width: 300px;
+            font-family: Arial, sans-serif;
+            font-size: 26px;
+        }
+
+        .bar-chart-indicator-row {
+            display: flex;
+        }
+
+        .bar-chart-indicator-col {
+            flex-basis: 0;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+            .bar-chart-indicator-col.negative-value {
+                color: #37043f
+            }
+
+            .bar-chart-indicator-col.title {
+                color: #495057
+            }
+
+            .bar-chart-indicator-col.positive-value {
+                color: #7a0307
+            }
+
+        .bar-chart-indicator-row.values {
+            position: relative;
+        }
+
+            .bar-chart-indicator-row.values svg {
+                position: absolute;
+                width: 100%;
+                z-index: -1;
+                height: 30px;
+                top: 0;
+            }
+
+        .bar {
+            fill: #87ceea;
+        }
+    </style>
+</head>
+<body>
+    <div class="bar-chart-indicator">
+        <div class="bar-chart-indicator-row header">
+            <div class="bar-chart-indicator-col negative-value">Losses</div>
+            <div class="bar-chart-indicator-col title">Fluid</div>
+            <div class="bar-chart-indicator-col positive-value">Gains</div>
+        </div>
+        <div class="bar-chart-indicator-row values" id="fluid-bar-chart">
+            <div class="bar-chart-indicator-col negative-value"><em>-1.821</em></div>
+            <div class="bar-chart-indicator-col positive-value"></div>
+        </div>
+        <div class="bar-chart-indicator-row unit">
+            <div class="bar-chart-indicator-col negative-value"><em>lit³</em></div>
+            <div class="bar-chart-indicator-col positive-value"></div>
+        </div>
+    </div>
+    <script src="~/lib/d3/dist/d3.min.js"></script>
+    <script>
+        function drawBarChart(chart) {
+            const container = document.querySelector(chart.containerSelector);
+            if (!container) {
+                return;
+            }
+
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            const svg = d3
+                .select(chart.containerSelector)
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            const xScale = d3
+                .scaleLinear()
+                .domain([chart.min, chart.max])
+                .range([0, width]);
+
+            const centerX = xScale(0);
+            const currentX = xScale(chart.current);
+
+            const barX = Math.min(centerX, currentX);
+            const barWidth = Math.abs(centerX - currentX);
+
+            svg.append("rect")
+                .attr("class", "bar")
+                .attr("x", barX)
+                .attr("width", barWidth)
+                .attr("height", height);
+        }
+
+        const options = {
+            containerSelector: "#fluid-bar-chart",
+            min: -3.6,
+            current: -1.821,
+            max: 3.6
+        };
+
+        drawBarChart(options);
+    </script>
+</body>
+</html>

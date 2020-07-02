@@ -1,0 +1,47 @@
+{
+  "version": "1.0",
+  "defaultProvider": "jsdelivr",
+  "libraries": [
+    {
+      "library": "moment@2.24.0",
+      "destination": "wwwroot/lib/moment/",
+      "files": [
+        "LICENSE",
+        "moment.js",
+        "moment.min.js"
+      ]
+    },
+    {
+      "library": "d3@5.15.0",
+      "destination": "wwwroot/lib/d3/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "normalize@8.0.1",
+      "destination": "wwwroot/lib/normalize/"
+    },
+    {
+      "library": "bootstrap@4.4.1",
+      "destination": "wwwroot/lib/bootstrap/",
+      "files": [
+        "dist/css/bootstrap.css",
+        "dist/css/bootstrap.min.css",
+        "dist/js/bootstrap.js",
+        "dist/js/bootstrap.min.js"
+      ]
+    },
+    {
+      "library": "jquery-slim@3.0.0",
+      "destination": "wwwroot/lib/jquery-slim/",
+      "files": [
+        "dist/jquery.slim.js",
+        "dist/jquery.slim.min.js"
+      ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "font-awesome@5.12.1",
+      "destination": "wwwroot/lib/font-awesome/"
+    }
+  ]
+}

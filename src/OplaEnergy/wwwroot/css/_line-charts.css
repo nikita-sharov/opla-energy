@@ -1,0 +1,165 @@
+﻿body {
+    font-family: Arial, sans-serif;
+}
+
+.row {
+    /*display: flex;*/
+    /*height: calc(100vh - 18px);*/
+}
+
+.column {
+    flex: 1 1;
+    min-width: 0;
+}
+
+    .column.time {
+        flex: 0 0;
+        min-width: 40px;
+    }
+
+        .column.time .tick text {
+            fill: #1474b0;
+        }
+
+    .column.flow,
+    .column.mw,
+    .column.chokes {
+        flex-basis: 20%;
+    }
+
+    .column.pressure {
+        flex-basis: 40%;
+    }
+
+.mouse-target {
+    fill: none;
+    pointer-events: all;
+}
+
+.tick line {
+    stroke: rgba(0, 0, 0, 0.2);
+}
+
+.border {
+    fill: none;
+    stroke: #989898;
+}
+
+.series path {
+    fill: none;
+    stroke-width: 2;
+}
+
+.tooltip {
+    pointer-events: none;
+}
+
+.series .flow-in {
+    stroke: #a3c15d;
+}
+
+.tooltip .flow-in {
+    fill: #a3c15d;
+}
+
+.series .flow-out {
+    stroke: #da9e46;
+}
+
+.tooltip .flow-out {
+    fill: #da9e46;
+}
+
+.series .spp {
+    stroke: #4a7595;
+}
+
+.tooltip .spp {
+    fill: #4a7595;
+}
+
+.series .bhp {
+    stroke: #7a0c15;
+}
+
+.tooltip .bhp {
+    fill: #7a0c15;
+}
+
+.series .sbp {
+    stroke: #402353;
+}
+
+.tooltip .sbp {
+    fill: #402353;
+}
+
+.series .mw-in {
+    stroke: #a5c05f;
+}
+
+.tooltip .mw-in {
+    fill: #a5c05f;
+}
+
+.series .mw-out {
+    stroke: #da9e46;
+}
+
+.tooltip .mw-out {
+    fill: #da9e46;
+}
+
+.series .choke-a-current {
+    stroke: #0e4e8b;
+}
+
+.tooltip .choke-a-current {
+    fill: #0e4e8b;
+}
+
+.series .choke-a-set {
+    stroke: #1bb7a2;
+    stroke-dasharray: 6 4;
+}
+
+.tooltip .choke-a-set {
+    fill: #1bb7a2;
+}
+
+.series .choke-b-current {
+    stroke: #a54ab3;
+}
+
+.tooltip .choke-b-current {
+    fill: #a54ab3;
+}
+
+.series .choke-b-set {
+    stroke: #d487cd;
+    stroke-dasharray: 6 4;
+}
+
+.tooltip .choke-b-set {
+    fill: #d487cd;
+}
+
+.tooltip .timestamp {
+    dominant-baseline: middle;
+    text-anchor: end;
+}
+
+.tooltip .line {
+    stroke: rgba(0, 0, 0, 0.3);
+    stroke-width: 4px;
+}
+
+.tooltip .background {
+    fill: white;
+}
+
+.time-context .domain,
+.time-context .tick line,
+.time-context .brush .selection {
+    stroke: #989898
+}

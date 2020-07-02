@@ -1,0 +1,134 @@
+﻿@page "/well-data"
+@{
+    Layout = "_Layout";
+}
+
+<div class="form-row">
+    <div class="col-3">
+        <partial name="_Directional" />
+    </div>
+    <div class="col-9">
+        <div class="form-row">
+            <div class="col-8">
+                <div class="box border rounded-lg shadow-sm p-2 bg-white">
+                    <nav>
+                        <div class="nav nav-tabs" role="tablist">
+                            <a class="nav-item nav-link active"
+                               id="nav-bit-tab"
+                               data-toggle="tab"
+                               href="#nav-bit"
+                               role="tab"
+                               aria-controls="nav-bit"
+                               aria-selected="true">Bit</a>
+                            <a class="nav-item nav-link"
+                               id="nav-bha-tab"
+                               data-toggle="tab"
+                               href="#nav-bha"
+                               role="tab"
+                               aria-controls="nav-bha"
+                               aria-selected="false">BHA</a>
+                            <a class="nav-item nav-link"
+                               id="nav-casing-tab"
+                               data-toggle="tab"
+                               href="#nav-casing"
+                               role="tab"
+                               aria-controls="nav-casing"
+                               aria-selected="false">Casing</a>
+                        </div>
+                    </nav>
+                    <div class="tab-content">
+                        <div class="tab-pane show active"
+                             id="nav-bit"
+                             role="tabpanel"
+                             aria-labelledby="nav-bit-tab"><partial name="_Bit" /></div>
+                        <div class="tab-pane"
+                             id="nav-bha"
+                             role="tabpanel"
+                             aria-labelledby="nav-bha-tab"><partial name="_Bha" /></div>
+                        <div class="tab-pane"
+                             id="nav-casing"
+                             role="tabpanel"
+                             aria-labelledby="nav-casing-tab"><partial name="_Casing" /></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="box border rounded-lg shadow-sm p-2 bg-white">
+                    <nav>
+                        <div class="nav nav-tabs" role="tablist">
+                            <a class="nav-item nav-link active"
+                               id="nav-fit-tab"
+                               data-toggle="tab"
+                               href="#nav-fit"
+                               role="tab"
+                               aria-controls="nav-fit"
+                               aria-selected="true">Fit</a>
+                            <a class="nav-item nav-link"
+                               id="nav-rcd-tab"
+                               data-toggle="tab"
+                               href="#nav-rcd"
+                               role="tab"
+                               aria-controls="nav-rcd"
+                               aria-selected="false">RCD</a>
+                            <a class="nav-item nav-link"
+                               id="nav-macp-tab"
+                               data-toggle="tab"
+                               href="#nav-macp"
+                               role="tab"
+                               aria-controls="nav-macp"
+                               aria-selected="false">MACP</a>
+                        </div>
+                    </nav>
+                    <div class="tab-content">
+                        <div class="tab-pane show active"
+                             id="nav-fit"
+                             role="tabpanel"
+                             aria-labelledby="nav-fit-tab"><partial name="_Fit" /></div>
+                        <div class="tab-pane"
+                             id="nav-rcd"
+                             role="tabpanel"
+                             aria-labelledby="nav-rcd-tab"><partial name="_Rcd" /></div>
+                        <div class="tab-pane"
+                             id="nav-macp"
+                             role="tabpanel"
+                             aria-labelledby="nav-macp-tab"><partial name="_Macp" /></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                <div class="box mt-2 border rounded-lg shadow-sm p-2 bg-white">
+                    <nav>
+                        <div class="nav nav-tabs" role="tablist">
+                            <a class="nav-item nav-link active"
+                               id="nav-mud-tab"
+                               data-toggle="tab"
+                               href="#nav-mud"
+                               role="tab"
+                               aria-controls="nav-mud"
+                               aria-selected="true">Mud</a>
+                            <a class="nav-item nav-link"
+                               id="nav-pumps-tab"
+                               data-toggle="tab"
+                               href="#nav-pumps"
+                               role="tab"
+                               aria-controls="nav-pumps"
+                               aria-selected="false">Pumps</a>
+                        </div>
+                    </nav>
+                    <div class="tab-content">
+                        <div class="tab-pane show active"
+                             id="nav-mud"
+                             role="tabpanel"
+                             aria-labelledby="nav-mud-tab"><partial name="_Mud" /></div>
+                        <div class="tab-pane"
+                             id="nav-pumps"
+                             role="tabpanel"
+                             aria-labelledby="nav-rcd-tab"><partial name="_Pumps" /></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

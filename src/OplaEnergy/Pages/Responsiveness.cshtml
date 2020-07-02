@@ -1,0 +1,372 @@
+﻿@page "/responsiveness"
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Responsiveness</title>
+    <style>
+        .row {
+            display: flex;
+            height: calc(100vh - 18px);
+        }
+
+        .column {
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+            .column.flow {
+                flex-basis: 24%;
+            }
+
+            .column.pressure {
+                flex-basis: 36%;
+            }
+
+            .column.mw {
+                flex-basis: 20%;
+            }
+
+            .column.chokes {
+                flex-basis: 20%;
+            }
+
+        .mouse-target {
+            fill: none;
+            pointer-events: all;
+        }
+
+        .border {
+            fill: none;
+            stroke: black;
+        }
+
+        .tick line {
+            stroke: rgba(0, 0, 0, 0.2);
+        }
+
+        .series {
+            fill: none;
+            pointer-events: none;
+            stroke-width: 2px;
+        }
+
+            .series .flow-in {
+                stroke: #a3c15d;
+            }
+
+            .series .flow-out {
+                stroke: #da9e46;
+            }
+
+            .series .spp {
+                stroke: #4a7595;
+            }
+
+            .series .bhp {
+                stroke: #7a0c15;
+            }
+
+            .series .sbp {
+                stroke: #402353;
+            }
+
+            .series .mw-in {
+                stroke: #a5c05f;
+            }
+
+            .series .mw-out {
+                stroke: #da9e46;
+            }
+
+            .series .choke-a-current {
+                stroke: #0e4e8b;
+            }
+
+            .series .choke-a-set {
+                stroke: #1bb7a2;
+                stroke-dasharray: 6 4;
+            }
+
+            .series .choke-b-current {
+                stroke: #a54ab3;
+            }
+
+            .series .choke-b-set {
+                stroke: #d487cd;
+                stroke-dasharray: 6 4;
+            }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="column flow"></div>
+        <div class="column pressure"></div>
+        <div class="column mw"></div>
+        <div class="column chokes"></div>
+    </div>
+    <script src="~/lib/d3/dist/d3.min.js"></script>
+    <script>
+        const n = 40;
+
+        function getRandom(min, max) {
+            return (Math.random() * (max - min)) + min;
+        }
+
+        function getRandomInteger(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+
+        function getRandomData(min, max) {            
+            const data = [];
+
+            let actualValue = 0;
+            let actualDuplicateCount = 0;
+            let targetDuplicateCount = 0;
+
+            for (let i = 0; i < n; i++) {
+                if (actualDuplicateCount === targetDuplicateCount) {
+                    actualValue = getRandom(min, max)
+                    actualDuplicateCount = 0;
+                    targetDuplicateCount = getRandomInteger(0, 10);
+                } else {
+                    actualDuplicateCount += 1;
+                }
+
+                data.push(actualValue);
+            }
+            
+            return data;
+        }
+
+        function getStaticData(value) {
+            return Array.from({ length: n }, () => value);
+        }
+
+        const options = [
+            {
+                name: "flow",
+                margin: {
+                    top: 8,
+                    right: 4,
+                    bottom: 8,
+                    left: 40
+                },                
+                domain: {
+                    min: 0,
+                    max: 3.6
+                },
+                series: [
+                    {
+                        name: "flow-in",
+                        data: getStaticData(1.821)
+                    },
+                    {
+                        name: "flow-out",
+                        data: getStaticData(0)
+                    }
+                ]
+            },
+            {
+                name: "pressure",
+                margin: {
+                    top: 8,
+                    right: 4,
+                    bottom: 8,
+                    left: 4
+                },                
+                domain: {
+                    min: 0,
+                    max: 30000
+                },
+                tickFormat: "",
+                series: [
+                    {
+                        name: "spp",
+                        data: getRandomData(0, 10000)
+                        ////data: getStaticData(8000)
+                    },
+                    {
+                        name: "bhp",
+                        data: getRandomData(0, 30000)
+                        ////data: getStaticData(107.6)
+                    },
+                    {
+                        name: "sbp",
+                        data: getRandomData(0, 5000)
+                        ////data: getRandomData(101.3)
+                    }
+                ]
+            },
+            {
+                name: "mw",
+                margin: {
+                    top: 8,
+                    right: 4,
+                    bottom: 8,
+                    left: 4
+                },                
+                domain: {
+                    min: 750,
+                    max: 1500
+                },
+                tickFormat: "",
+                series: [
+                    {
+                        name: "mw-in",
+                        data: getRandomData(750, 1500)
+                    },
+                    {
+                        name: "mw-out",
+                        data: getRandomData(750, 1500)
+                    },
+                ]
+            },
+            {
+                name: "chokes",
+                margin: {
+                    top: 8,
+                    right: 8,
+                    bottom: 8,
+                    left: 4
+                },                
+                domain: {
+                    min: 0,
+                    max: 100
+                },
+                tickFormat: "",
+                series: [
+                    {
+                        name: "choke-a-current",
+                        data: getRandomData(0, 100)
+                    },
+                    {
+                        name: "choke-a-set",
+                        data: getRandomData(0, 100)
+                    },
+                    {
+                        name: "choke-b-current",
+                        data: getRandomData(0, 100)
+                    },
+                    {
+                        name: "choke-b-set",
+                        data: getRandomData(0, 100)
+                    },
+                ]
+            }
+        ];
+
+        function createChart(options) {
+            const container = d3.select("." + options.name);
+            const svg = container.append("svg");
+
+            const chart = svg.append("g")
+                .attr("class", "chart")
+                .attr("transform", `translate(${options.margin.left},${options.margin.top})`);
+
+            const clipPath = chart.append("defs")
+                .append("clipPath")
+                .attr("id", options.name + "-clip")
+                .append("rect");
+
+            // avoids overlapping with the border
+            const distance = options.domain.max - options.domain.min;
+            const localMin = options.domain.min - (distance * 0.01);
+            const localMax = options.domain.max + (distance * 0.01);
+
+            const xScale = d3.scaleLinear()
+                .domain([localMin, localMax]);
+
+            const xAxis = d3.axisTop(xScale)
+                .tickSizeOuter(0)
+                .tickFormat("");
+
+            const xAxisElements = chart.append("g")
+                .attr("class", "x-axis");
+
+            const yScale = d3.scaleLinear()
+                .domain([0, n - 1]);
+
+            const yAxis = d3.axisLeft(yScale)
+                .ticks(n -1)
+                .tickSizeOuter(0);
+
+            if (options.tickFormat !== undefined) {
+                yAxis.tickFormat(options.tickFormat)
+            }
+
+            const yAxisElements = chart.append("g")
+                .attr("class", "y-axis");
+
+            const mouseTarget = chart.append("rect")
+                .attr("class", "mouse-target");
+                //.on("mousemove", mousemove)
+                //.on("mouseleave", mouseleave);
+
+            const border = chart.append("path")
+                .attr("class", "border");
+
+            const series = chart.append("g")
+                .attr("class", "series")
+                .attr("clip-path", `url(#${options.name}-clip)`);
+
+            const line = d3.line()
+                .x((d) => xScale(d))
+                .y((d, i) => yScale(i));
+
+            for (const entry of options.series) {
+                series.append("path")
+                    .attr("class", `${entry.name}`);
+            }
+
+            function update() {
+                const containerWidth = container.node().clientWidth;
+                const containerHeight = container.node().clientHeight;
+
+                svg.attr("width", containerWidth)
+                    .attr("height", containerHeight);
+
+                const chartWidth = containerWidth - options.margin.left - options.margin.right;
+                const chartHeight = containerHeight - options.margin.top - options.margin.bottom;
+
+                clipPath.attr("width", chartWidth)
+                    .attr("height", chartHeight);
+
+                xScale.range([0, chartWidth]);
+                yScale.range([0, chartHeight]);
+
+                xAxis.tickSizeInner(-chartHeight);
+                xAxisElements.call(xAxis);
+
+                yAxis.tickSizeInner(-chartWidth);
+                yAxisElements.call(yAxis);
+
+                mouseTarget.attr("width", chartWidth)
+                    .attr("height", chartHeight);
+
+                // adding 0.5 to get the stroke width of 1
+                border.attr("d", `M0.5,0.5H${chartWidth + 0.5}V${chartHeight + 0.5}H0.5V0.5`);
+
+                for (const entry of options.series) {
+                    series.select(`.${entry.name}`)
+                        .attr("d", line(entry.data));
+                }
+            }
+
+            window.addEventListener("resize", () => {
+                update();
+            });
+
+            update();
+        }
+
+        for (const chart of options) {
+            createChart(chart);
+        }
+
+    </script>
+</body>
+</html>

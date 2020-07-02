@@ -1,0 +1,44 @@
+﻿
+
+.chart {
+    font-size: 80%;
+}
+
+.legend .dataset line {
+    fill: none;
+    stroke-width: 2;
+}
+
+.chart .tick line,
+.chart path.domain {
+    stroke: #0003;
+}
+
+.series path {
+    fill: none;
+    stroke-width: 2;
+}
+
+.bingham-plastic {
+    stroke: var(--blue);
+}
+
+.herschel-bulkley {
+    stroke: var(--orange);
+}
+
+.power-law {
+    stroke: var(--green);
+}
+
+.axis {
+    font-family: var(--font-family-sans-serif);
+}
+
+    .axis .label {
+        font-size: 80%;
+    }
+
+.dot {
+    fill: var(--white);
+}
